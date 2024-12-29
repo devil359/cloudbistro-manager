@@ -18,6 +18,9 @@ import {
   CalendarRange,
   ChevronDown,
   ChevronRight,
+  List,
+  ListChecks,
+  Plus,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -29,6 +32,7 @@ import {
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const reservationSubMenus = [
@@ -41,6 +45,12 @@ const DashboardLayout = () => {
     },
   ];
 
+  const menuSubMenus = [
+    { icon: List, label: "Available Items", path: "/available-items" },
+    { icon: ListChecks, label: "All Items", path: "/all-items" },
+    { icon: Plus, label: "Add Menu Items", path: "/add-menu-items" },
+  ];
+
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Store, label: "Restaurants", path: "/restaurants" },
@@ -51,9 +61,19 @@ const DashboardLayout = () => {
       path: "/reservations",
       hasSubmenu: true,
       submenuItems: reservationSubMenus,
+      isOpen: reservationOpen,
+      setIsOpen: setReservationOpen,
     },
     { icon: Heart, label: "Customer Satisfaction", path: "/satisfaction" },
-    { icon: Menu, label: "Menus", path: "/menus" },
+    {
+      icon: Menu,
+      label: "Menus",
+      path: "/menus",
+      hasSubmenu: true,
+      submenuItems: menuSubMenus,
+      isOpen: menuOpen,
+      setIsOpen: setMenuOpen,
+    },
     { icon: PackageSearch, label: "Suppliers", path: "/suppliers" },
     { icon: Package, label: "Inventory", path: "/inventory" },
     { icon: Settings, label: "Settings", path: "/settings" },
@@ -61,7 +81,6 @@ const DashboardLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <div
         className={cn(
           "fixed left-0 top-0 h-full bg-[#1C1C28] text-white shadow-lg transition-all duration-300",
@@ -86,8 +105,8 @@ const DashboardLayout = () => {
             item.hasSubmenu ? (
               <Collapsible
                 key={item.path}
-                open={reservationOpen}
-                onOpenChange={setReservationOpen}
+                open={item.isOpen}
+                onOpenChange={item.setIsOpen}
               >
                 <CollapsibleTrigger asChild>
                   <Button
@@ -103,7 +122,7 @@ const DashboardLayout = () => {
                     </div>
                     {!collapsed && (
                       <div className="ml-2">
-                        {reservationOpen ? (
+                        {item.isOpen ? (
                           <ChevronDown className="h-4 w-4" />
                         ) : (
                           <ChevronRight className="h-4 w-4" />
@@ -145,7 +164,6 @@ const DashboardLayout = () => {
         </nav>
       </div>
 
-      {/* Main content */}
       <div
         className={cn(
           "transition-all duration-300",
