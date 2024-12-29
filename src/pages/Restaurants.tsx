@@ -1,6 +1,22 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, Clock, RotateCcw, DollarSign } from "lucide-react";
+import {
+  RefreshCcw,
+  Clock,
+  RotateCcw,
+  DollarSign,
+  Plus,
+  Filter,
+} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Restaurants = () => {
   const stats = [
@@ -26,12 +42,31 @@ const Restaurants = () => {
     },
   ];
 
-  const quickLinks = [
-    { title: "New Order", href: "#" },
-    { title: "Reserve Table", href: "#" },
-    { title: "Add Menu Items", href: "#" },
-    { title: "Add Invoice", href: "#" },
-    { title: "Update Daily Usage", href: "#" },
+  const menuItems = [
+    {
+      id: 1,
+      name: "Vegetable Spring Roll",
+      type: "Appetizer",
+      price: "₹ 150",
+    },
+    {
+      id: 2,
+      name: "Chicken Tikka",
+      type: "Main Course",
+      price: "₹ 280",
+    },
+    {
+      id: 3,
+      name: "Paneer Butter Masala",
+      type: "Main Course",
+      price: "₹ 220",
+    },
+    {
+      id: 4,
+      name: "Chocolate Brownie",
+      type: "Dessert",
+      price: "₹ 180",
+    },
   ];
 
   return (
@@ -53,72 +88,49 @@ const Restaurants = () => {
         ))}
       </div>
 
-      {/* Order Status Section */}
-      <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Order Status</CardTitle>
-            <Button variant="link" className="text-coral-500">
-              View All
+      {/* Available Items Table */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Available Items</CardTitle>
+          <div className="flex space-x-2">
+            <Button variant="outline" size="icon">
+              <Filter className="h-4 w-4" />
             </Button>
-          </CardHeader>
-          <CardContent>
-            <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-              No Orders Available
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Quick Links Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Links</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {quickLinks.map((link) => (
-              <Button
-                key={link.title}
-                variant="ghost"
-                className="w-full justify-start text-muted-foreground hover:text-coral-500"
-                asChild
-              >
-                <a href={link.href}>{link.title}</a>
-              </Button>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Revenue and Expenses Section */}
-      <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Revenue</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <span className="text-muted-foreground">Revenue</span>
-              <Button variant="outline" size="sm">
-                Regenerate
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Expenses</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <span className="text-muted-foreground">Expenses</span>
-              <Button variant="outline" size="sm">
-                Regenerate
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Button className="bg-coral-500 hover:bg-coral-600">
+              <Plus className="mr-2 h-4 w-4" /> Add Item
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-12">
+                  <Checkbox />
+                </TableHead>
+                <TableHead>Item Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead className="text-right">Price</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {menuItems.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Checkbox />
+                  </TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.type}</TableCell>
+                  <TableCell className="text-right">{item.price}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="mt-4 text-sm text-muted-foreground">
+            Showing {menuItems.length} of {menuItems.length} items
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
