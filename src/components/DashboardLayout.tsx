@@ -9,6 +9,10 @@ import {
   Calendar,
   Settings,
   Menu,
+  ChefHat,
+  Heart,
+  PackageSearch,
+  Package,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,8 +23,12 @@ const DashboardLayout = () => {
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Store, label: "Restaurants", path: "/restaurants" },
-    { icon: Users, label: "Users", path: "/users" },
-    { icon: Calendar, label: "Subscriptions", path: "/subscriptions" },
+    { icon: ChefHat, label: "Kitchen Order Tickets", path: "/tickets" },
+    { icon: Calendar, label: "Reservation", path: "/reservations" },
+    { icon: Heart, label: "Customer Satisfaction", path: "/satisfaction" },
+    { icon: Menu, label: "Menus", path: "/menus" },
+    { icon: PackageSearch, label: "Suppliers", path: "/suppliers" },
+    { icon: Package, label: "Inventory", path: "/inventory" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
@@ -29,7 +37,7 @@ const DashboardLayout = () => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300",
+          "fixed left-0 top-0 h-full bg-[#1C1C28] text-white shadow-lg transition-all duration-300",
           collapsed ? "w-16" : "w-64"
         )}
       >
@@ -40,6 +48,7 @@ const DashboardLayout = () => {
           <Button
             variant="ghost"
             size="icon"
+            className="text-white hover:bg-gray-800"
             onClick={() => setCollapsed(!collapsed)}
           >
             <Menu className="h-6 w-6" />
@@ -51,7 +60,7 @@ const DashboardLayout = () => {
               key={item.path}
               variant="ghost"
               className={cn(
-                "w-full justify-start",
+                "w-full justify-start text-gray-300 hover:bg-gray-800 hover:text-white",
                 collapsed ? "px-2" : "px-4"
               )}
               onClick={() => navigate(item.path)}
@@ -70,7 +79,7 @@ const DashboardLayout = () => {
           collapsed ? "ml-16" : "ml-64"
         )}
       >
-        <div className="p-8">
+        <div className="min-h-screen bg-gray-100">
           <Outlet />
         </div>
       </div>
