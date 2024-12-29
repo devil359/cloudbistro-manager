@@ -13,18 +13,45 @@ import {
   Heart,
   PackageSearch,
   Package,
+  CalendarCheck,
+  CalendarDays,
+  CalendarRange,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [reservationOpen, setReservationOpen] = useState(false);
   const navigate = useNavigate();
+
+  const reservationSubMenus = [
+    { icon: CalendarRange, label: "Reserve Table", path: "/reserve-table" },
+    { icon: CalendarDays, label: "Reservations", path: "/reservations-list" },
+    {
+      icon: CalendarCheck,
+      label: "Today's Reservations",
+      path: "/todays-reservations",
+    },
+  ];
 
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Store, label: "Restaurants", path: "/restaurants" },
     { icon: ChefHat, label: "Kitchen Order Tickets", path: "/tickets" },
-    { icon: Calendar, label: "Reservation", path: "/reservations" },
+    {
+      icon: Calendar,
+      label: "Reservation",
+      path: "/reservations",
+      hasSubmenu: true,
+      submenuItems: reservationSubMenus,
+    },
     { icon: Heart, label: "Customer Satisfaction", path: "/satisfaction" },
     { icon: Menu, label: "Menus", path: "/menus" },
     { icon: PackageSearch, label: "Suppliers", path: "/suppliers" },
@@ -55,20 +82,66 @@ const DashboardLayout = () => {
           </Button>
         </div>
         <nav className="space-y-2 px-2">
-          {menuItems.map((item) => (
-            <Button
-              key={item.path}
-              variant="ghost"
-              className={cn(
-                "w-full justify-start text-gray-300 hover:bg-gray-800 hover:text-white",
-                collapsed ? "px-2" : "px-4"
-              )}
-              onClick={() => navigate(item.path)}
-            >
-              <item.icon className="h-5 w-5" />
-              {!collapsed && <span className="ml-2">{item.label}</span>}
-            </Button>
-          ))}
+          {menuItems.map((item) =>
+            item.hasSubmenu ? (
+              <Collapsible
+                key={item.path}
+                open={reservationOpen}
+                onOpenChange={setReservationOpen}
+              >
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "w-full justify-between text-gray-300 hover:bg-gray-800 hover:text-white",
+                      collapsed ? "px-2" : "px-4"
+                    )}
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="h-5 w-5" />
+                      {!collapsed && <span className="ml-2">{item.label}</span>}
+                    </div>
+                    {!collapsed && (
+                      <div className="ml-2">
+                        {reservationOpen ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
+                      </div>
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {!collapsed &&
+                    item.submenuItems?.map((subItem) => (
+                      <Button
+                        key={subItem.path}
+                        variant="ghost"
+                        className="ml-6 w-[calc(100%-24px)] justify-start text-gray-300 hover:bg-gray-800 hover:text-white"
+                        onClick={() => navigate(subItem.path)}
+                      >
+                        <subItem.icon className="h-4 w-4" />
+                        <span className="ml-2">{subItem.label}</span>
+                      </Button>
+                    ))}
+                </CollapsibleContent>
+              </Collapsible>
+            ) : (
+              <Button
+                key={item.path}
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start text-gray-300 hover:bg-gray-800 hover:text-white",
+                  collapsed ? "px-2" : "px-4"
+                )}
+                onClick={() => navigate(item.path)}
+              >
+                <item.icon className="h-5 w-5" />
+                {!collapsed && <span className="ml-2">{item.label}</span>}
+              </Button>
+            )
+          )}
         </nav>
       </div>
 
